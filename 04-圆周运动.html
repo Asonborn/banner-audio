@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset='UTF-8'>
+	<meta name='keywords' content=''>
+	<meta name='description' content=''>
+	<title></title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+
+		body {
+			text-align: center;
+		}
+
+		#box {
+			position: relative;
+			width: 300px;
+			height: 300px;
+			border: solid;
+			margin: 50px auto;
+			border-radius: 50%;
+		}
+
+		#ball {
+			position: absolute;
+			right: -10px;
+			top: 140px;
+			width: 20px;
+			height: 20px;
+			background-color: pink;
+			border-radius: 50%;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="box">
+		<i id='ball'></i>
+	</div>
+
+	<input type="button" id='btn1' value='run'>
+	<input type="button" id='btn2' value='stop'>
+	<script>
+		// 获取需要操作的DOM元素
+		var oBox = document.getElementById('box');
+		var oBall = document.getElementById('ball');
+
+		var btn1 = document.getElementById('btn1');
+		var btn2 = document.getElementById('btn2');
+		var timer = 0;
+		var x = 0;
+
+		// 半径
+		var r = oBox.clientWidth / 2;
+
+		// 点击事件
+		btn1.onclick = function () {
+
+			// 设表先关
+			clearInterval(timer);
+
+			// 开启定时器
+			timer = setInterval(function () {
+				x++;
+
+				oBall.style.left = r + r * (Math.cos(Math.PI * x / 180)) - 10 + 'px'
+				oBall.style.top = r - r * (Math.sin(Math.PI * x / 180)) - 10 + 'px'
+
+			}, 30)
+
+
+
+		}
+
+		btn2.onclick = function () {
+			clearInterval(timer);
+		}
+
+
+
+
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    #box {
+      position: absolute;
+      left: 0;
+      width: 100px;
+      height: 100px;
+      opacity: .2;
+      background-color: pink;
+      /* transition: 1s; */
+    }
+
+    /* #box:hover {
+      width: 400px;
+    } */
+  </style>
+</head>
+
+<body>
+  <div id="box"></div>
+
+  <script>
+    // 获取标签元素
+    var oBox = document.getElementById('box');
+
+    // 封装我们的框架
+    function animation(dom, targetJson, time, callback) {
+      var startJson = {}
+      var speedJson = {}
+
+      for (var key in targetJson) {
+        // 获取起点值
+        startJson[key] = getStyle(dom, key);
+
+        // 计算速度
+        speedJson[key] = (targetJson[key] - startJson[key]) / (time * 1000);
+      }
+
+
+      // 获取初始时间
+      var startTime = new Date();
+
+      // 设置定时器
+      var timer = setInterval(function () {
+        // 获取时间差
+        var _time = new Date() - startTime;
+        // // console.log(_time)
+        for (var key in targetJson) {
+          if (key !== 'opacity') {
+            dom.style[key] = startJson[key] + _time * speedJson[key] + 'px';
+          } else {
+            dom.style[key] = startJson[key] + _time * speedJson[key];
+          }
+
+          // 判断收尾
+          if (_time >= time * 1000) {
+            if (key !== 'opacity') {
+              dom.style[key] = targetJson[key] + 'px';
+            } else {
+              dom.style[key] = targetJson[key];
+            }
+          }
+        }
+
+        if (_time >= time * 1000) {
+          clearInterval(timer);
+          callback && callback.call(dom, startJson, time)
+        }
+
+
+      }, 20)
+
+    }
+
+    function getStyle(dom, attr) {
+      return dom.currentStyle ? parseFloat(dom.currentStyle[attr]) : parseFloat(getComputedStyle(dom)[attr]);
+    }
+
+    // 框架的执行
+    // animation(oBox, 'width', 400, 2)
+    // animation(oBox, 'height', 350, 4)
+    // animation(oBox, 'opacity', .8, 2)
+
+    animation(oBox, {
+      'width': 400,
+      'height': 400,
+      // 'opacity': .8,
+      // 'left': 100
+    }, 2, function (targetJson, time) {
+
+      animation(this, targetJson, time,
+        function () {
+          animation(this, {
+            'width': 600,
+            'height': 600,
+            'opacity': .8,
+            'left': 10
+          }, 3, function () {
+            animation(this, {
+              'width': 50,
+              'height': 50,
+              'opacity': .1,
+              'left': 100
+            }, 4, function () {
+
+            })
+          })
+        })
+
+    })
+
+
+    // function a(c){
+    //   var num = 222;
+    //   console.log(1);
+    //   console.log(2)
+    //   console.log(c)
+    //   c(num)
+    // }
+    // a(b)
+
+    // console.log(num)
+
+    // function b(d){
+    //   console.log(d)  // 222
+    // }
+
+
+    // function vv(num){
+
+    // }
+
+    // var qq = vv;
+    // qq(33)
+  </script>
+</body>
+
+</html>
